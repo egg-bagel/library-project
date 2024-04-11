@@ -60,4 +60,53 @@ function displayBooks(myLibrary) {
 
 }
 
+// Clears the table of books so it can be rewritten with a new book.
+function clearTable() {
+  const libraryTableContainer = document.getElementById("table-container");
+  libraryTableContainer.innerHTML = "";
+}
+
+// Constants for operating the form to submit a new book
+const dialog = document.getElementById("new-book-dialog");
+const newBookForm = document.getElementById("new-book-form");
+const showDialogButton = document.getElementById("add-new-book");
+const closeDialogButton = document.getElementById("submit-new-book");
+
+// Opens the form to submit a new book
+showDialogButton.addEventListener("click", () => {
+  dialog.showModal();
+})
+
+// Stores the book info in the myLibrary array, displays the updated book list, and closes the form
+newBookForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  newBookArray = [];
+  
+  const titleInput = document.getElementById("title");
+  const authorInput = document.getElementById("author");
+  const pagesInput = document.getElementById("pages");
+
+  function getRadioValue() {
+    var radioElements = document.getElementsByName("read");
+
+    for (let i = 0; i < radioElements.length; i++) {
+      if (radioElements[i].checked) {
+        return radioElements[i].value
+      }
+    }
+  }
+
+  const title = titleInput.value;
+  const author = authorInput.value;
+  const pages = pagesInput.value;
+  const isRead = getRadioValue();
+
+  newBookArray.push(title, author, pages, isRead);
+  myLibrary.push(newBookArray);
+  clearTable();
+  displayBooks(myLibrary);
+  dialog.close();
+})
+ 
 displayBooks(myLibrary);

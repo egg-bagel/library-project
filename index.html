@@ -9,6 +9,27 @@
   <body>
     <h1>Library</h1>
 
+    <dialog id="new-book-dialog">
+      <form id="new-book-form">
+        <label for="title">Title:</label><br>
+        <input type="text" id="title" name="title" required><br>
+        <label for="author">Author:</label><br>
+        <input type="text" id="author" name="author" required><br>
+        <label for="pages">Number of pages:</label><br>
+        <input type="number" id="pages" name="pages" required><br>
+        <fieldset>
+          <legend>Have you read this book?</legend><br>
+          <input type="radio" id="read-true" name="read" value="true" required>
+          <label for="read-true">Yes</label><br>
+          <input type="radio" id="read-false" name="read" value="false">
+          <label for="read-false">No</label><br>
+        </fieldset>
+        <input type="submit" id="submit-new-book" value="Submit">
+      </form>
+    </dialog> 
+
+    <button id="add-new-book">Add new book</button>
+
     <div id="table-container"></div>
 
     <script src="script.js"></script>
