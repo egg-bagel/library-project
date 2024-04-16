@@ -17,12 +17,6 @@ function Book(title, author, pages, read) {
   }
 }
 
-// Adds a new Book object to the array of Book objects.
-function addBookToLibrary(title, author, pages, read) {
-  const book = new Book(title, author, pages, read);
-  myLibrary.push(book);
-}
-
 // Loops through the myLibrary array and displays every book on the page.
 function displayBooks(myLibrary) {
   const libraryTableContainer = document.getElementById("table-container");
@@ -30,7 +24,7 @@ function displayBooks(myLibrary) {
   const tableHead = document.createElement("thead");
   const tableBody = document.createElement("tbody");
 
-  const tableHeaders = ["Title", "Author", "Pages", "Read?"];
+  const tableHeaders = ["Title", "Author", "Pages", "Read?", "", ""];
   const headerRow = document.createElement("tr");
 
   // Create the table header
@@ -42,15 +36,56 @@ function displayBooks(myLibrary) {
     tableHead.appendChild(headerRow);
   }
 
-  // Add each book object in myLibrary to the table
+  // Add the data from each book object in myLibrary to the table
   for (let i = 0; i < myLibrary.length; i++) {
     const tableRow = document.createElement("tr");
     for (let j = 0; j < myLibrary[i].length; j++) {
       const rowElement = document.createElement("td");
-      const rowElementText = document.createTextNode(myLibrary[i][j]);
+      const rowElementText = document.createTextNode(myLibrary[i][j].toString());
       rowElement.appendChild(rowElementText);
       tableRow.appendChild(rowElement);
     }
+
+    // Add a "Remove book" button to the row
+    const buttonColumn = document.createElement("td");
+    const removeButton = document.createElement("button");
+    removeButton.setAttribute("class", "remove-book-button");
+    removeButton.textContent = "Remove book";
+    tableRow.appendChild(buttonColumn);
+    buttonColumn.appendChild(removeButton);
+
+    //Allows user to delete a book
+    removeButton.addEventListener("click", () => {
+      myLibrary.splice(i, 1);
+      clearTable();
+      displayBooks(myLibrary);
+    })
+
+    // Add a button to mark a book read or unread
+    const toggleReadColumn = document.createElement("td");
+    const toggleReadButton = document.createElement("button");
+    toggleReadButton.setAttribute("class", "toggle-read-button");
+    if (myLibrary[i][3] === true) {
+      toggleReadButton.textContent = "Mark as unread";
+    } else {
+      toggleReadButton.textContent = "Mark as read";
+    }
+    tableRow.appendChild(toggleReadColumn);
+    toggleReadColumn.appendChild(toggleReadButton);
+
+    // Allows user to change the read/unread status of a book
+    toggleReadButton.addEventListener("click", () => {
+      if (myLibrary[i][3] === true) {
+        myLibrary[i][3] = false;
+        toggleReadButton.textContent = "Mark as read";
+      } else {
+        myLibrary[i][3] = true;
+        toggleReadButton.textContent = "Mark as unread";
+      }
+      clearTable();
+      displayBooks(myLibrary);
+    }) 
+
     tableBody.appendChild(tableRow);
   }
 
@@ -60,7 +95,7 @@ function displayBooks(myLibrary) {
 
 }
 
-// Clears the table of books so it can be rewritten with a new book.
+// Clears the table of books so it can be rewritten with an updated version of myLibrary.
 function clearTable() {
   const libraryTableContainer = document.getElementById("table-container");
   libraryTableContainer.innerHTML = "";
@@ -99,8 +134,8 @@ newBookForm.addEventListener("submit", (e) => {
 
   const title = titleInput.value;
   const author = authorInput.value;
-  const pages = pagesInput.value;
-  const isRead = getRadioValue();
+  const pages = parseInt(pagesInput.value);
+  const isRead = (getRadioValue() === "true");
 
   newBookArray.push(title, author, pages, isRead);
   myLibrary.push(newBookArray);
@@ -108,5 +143,5 @@ newBookForm.addEventListener("submit", (e) => {
   displayBooks(myLibrary);
   dialog.close();
 })
- 
+
 displayBooks(myLibrary);
